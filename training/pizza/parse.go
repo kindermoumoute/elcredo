@@ -1,25 +1,15 @@
-package pizza
-
-import (
-	"bytes"
-	"bufio"
-	"strings"
-	"strconv"
-	"io/ioutil"
-)
-
 package main
 
 import (
-"bufio"
-"bytes"
-"io/ioutil"
-"strconv"
-"strings"
+	"bufio"
+	"bytes"
+	"io/ioutil"
+	"strconv"
+	"strings"
 )
 
-func parse() *Pizza {
-	dat, err := ioutil.ReadFile("input/small.in")
+func parse(path string) *Pizza {
+	dat, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
@@ -32,11 +22,12 @@ func parse() *Pizza {
 	for s.Scan() {
 		for _, c := range s.Bytes() {
 			switch c {
-				case byte('T'):
-				myPizza.Cell[i] = TOMATO
-					case byte('M'):
-				myPizza.Cell[i] = MUSHROOM
+			case byte('T'):
+				myPizza.Cell[i].Ingredient = TOMATO
+			case byte('M'):
+				myPizza.Cell[i].Ingredient = MUSHROOM
 			}
+			i++
 		}
 	}
 

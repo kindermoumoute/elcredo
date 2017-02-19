@@ -1,4 +1,4 @@
-package pizza
+package main
 
 type Pizza struct {
 	Rows, Columns int
