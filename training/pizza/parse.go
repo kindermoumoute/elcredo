@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"strconv"
 	"strings"
@@ -34,6 +35,20 @@ func parse(path string) *Pizza {
 	return &myPizza
 }
 
+func encode(slices []*Slice) string {
+	output := fmt.Sprintf("%d", len(slices))
+	for _, slice := range slices {
+		output += fmt.Sprintf("\n%d %d %d %d", slice.X1, slice.Y1, slice.X2, slice.Y2)
+	}
+	return output
+}
+func write(slices []*Slice) {
+	output := encode(slices)
+	err := ioutil.WriteFile("output/out.out", []byte(output), 0644)
+	if err != nil {
+		return
+	}
+}
 func toSliceOfInt(line string) []int {
 	args := strings.Split(line, " ")
 	rep := make([]int, len(args))
