@@ -1,13 +1,29 @@
 package main
 
-func addRequestNotSorted(casheServer *CacheServer, request *Request) {
-	taille := y.Video[request.VideoID].Size
+func addRequestNotSorted(cacheServer *CacheServer, request *Request) {
+	size := y.Video[request.VideoID].Size
 	nbrReq := request.NRequest
 	latenceDateCenter := y.Endpoint[request.EndpointID].LatencyDataCenter
-	latenceCasheServer := y.Endpoint[request.EndpointID].Connection[request.EndpointID].LatencyCacheServer
-	latenceGagne := latenceDateCenter - latenceCasheServer
+	latenceCacheServer := y.Endpoint[request.EndpointID].Connection[request.EndpointID].LatencyCacheServer
+	latenceWon := latenceDateCenter - latenceCacheServer
 
-	request.Score = (nbrReq * latenceGagne) / taille
+	request.Score = (nbrReq * latenceWon) / size
 
-	casheServer.Request = append(casheServer.Request, request)
+	cacheServer.Request = append(cacheServer.Request, request)
+}
+
+func feedCasheServerRequests(cacheID int) {
+
+	for numEndPoint := 0; numEndPoint < y.NEndpoints; numEndPoint++ {
+		for numConnection := 0; numConnection < len(y.Endpoint[numEndPoint].Connection); numConnection++ {
+
+			if y.Endpoint[numEndPoint].Connection[numConnection].CacheID == cacheID {
+				for numRequest := 0; numRequest < y.NRequests; numRequest++ {
+					if y.Request[numRequest].EndpointID == numEndPoint {
+						y.Cache[cacheID].Request = append(y.Cache[cacheID].Request)
+					}
+				}
+			}
+		}
+	}
 }
