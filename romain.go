@@ -9,7 +9,7 @@ func (cs CacheServer) isFull(video Video) bool {
 }
 
 // This function takes the requests following the array's order and add the videos into the VideoID array if possible
-func (cs CacheServer) addVideos() {
+func (cs *CacheServer) addVideos() {
 	for _,request := range cs.Request {
 		_, exist := cs.VideoID[request.VideoID]
 		if !exist && !cs.isFull(y.Video[request.VideoID]) {

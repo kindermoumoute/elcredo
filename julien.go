@@ -1,17 +1,21 @@
 package main
 
-import "fmt"
+func addRequestNotSorted(cacheID, requestID int) {
+	size := y.Video[y.Request[requestID].VideoID].Size
+	nbrReq := y.Request[requestID].NRequest
+	latenceDateCenter := y.Endpoint[y.Request[requestID].EndpointID].LatencyDataCenter
+	var connection Connection
+	for _, c := range y.Endpoint[y.Request[requestID].EndpointID].Connection {
+		if c.CacheID == cacheID {
+			connection = c
+			break
+		}
+	}
+	latenceWon := latenceDateCenter - connection.LatencyCacheServer
 
-func addRequestNotSorted(cacheServer *CacheServer, request *Request) {
-	size := y.Video[request.VideoID].Size
-	nbrReq := request.NRequest
-	latenceDateCenter := y.Endpoint[request.EndpointID].LatencyDataCenter
-	latenceCacheServer := y.Endpoint[request.EndpointID].Connection[request.EndpointID].LatencyCacheServer
-	latenceWon := latenceDateCenter - latenceCacheServer
+	y.Request[requestID].Score = (nbrReq * latenceWon) / size
 
-	request.Score = (nbrReq * latenceWon) / size
-
-	cacheServer.Request = append(cacheServer.Request, request)
+	y.Cache[cacheID].Request = append(y.Cache[cacheID].Request, &y.Request[requestID])
 }
 
 func feedCasheServerRequests(cacheID int) {
@@ -20,9 +24,7 @@ func feedCasheServerRequests(cacheID int) {
 			if y.Endpoint[numEndPoint].Connection[numConnection].CacheID == cacheID {
 				for numRequest := 0; numRequest < y.NRequests; numRequest++ {
 					if y.Request[numRequest].EndpointID == numEndPoint {
-						fmt.Println(len(y.Request), numRequest)
-						addRequestNotSorted(&(y.Cache[cacheID]),
-							&(y.Request[numRequest]))
+						addRequestNotSorted(cacheID, numRequest)
 					}
 				}
 			}
