@@ -1,11 +1,14 @@
 package main
 
+import "fmt"
+
 var (
-	fileName = "small"
+	fileName = "me_at_the_zoo"
+	y        YoutubeCache
 )
 
 func main() {
-	myPizza := read()
-
-	write(myPizza)
+	read()
+	fmt.Println(y)
+	// write()
 }
