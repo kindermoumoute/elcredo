@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func addRequestNotSorted(cacheServer *CacheServer, request *Request) {
 	size := y.Video[request.VideoID].Size
 	nbrReq := request.NRequest
@@ -13,14 +15,14 @@ func addRequestNotSorted(cacheServer *CacheServer, request *Request) {
 }
 
 func feedCasheServerRequests(cacheID int) {
-
 	for numEndPoint := 0; numEndPoint < y.NEndpoints; numEndPoint++ {
 		for numConnection := 0; numConnection < len(y.Endpoint[numEndPoint].Connection); numConnection++ {
-
 			if y.Endpoint[numEndPoint].Connection[numConnection].CacheID == cacheID {
 				for numRequest := 0; numRequest < y.NRequests; numRequest++ {
 					if y.Request[numRequest].EndpointID == numEndPoint {
-						y.Cache[cacheID].Request = append(y.Cache[cacheID].Request)
+						fmt.Println(len(y.Request), numRequest)
+						addRequestNotSorted(&(y.Cache[cacheID]),
+							&(y.Request[numRequest]))
 					}
 				}
 			}

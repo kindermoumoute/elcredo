@@ -31,6 +31,7 @@ func decode(b []byte) {
 		Video:      make([]Video, args[0]),
 		Endpoint:   make([]Endpoint, args[1]),
 		Request:    make([]Request, args[2]),
+		Cache:      make([]CacheServer, args[3]),
 	}
 	s.Scan()
 	args = toSliceOfInt(s.Text())
