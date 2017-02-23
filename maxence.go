@@ -3,7 +3,7 @@ package main
 func (y YoutubeCache) calcTotalScore() int {
 	scoreTotal := 0
 	for _, request := range y.Request {
-		scoreTotal += request.score
+		scoreTotal += request.Score
 	}
 	return scoreTotal
 }
