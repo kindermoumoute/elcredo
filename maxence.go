@@ -7,3 +7,9 @@ func (y YoutubeCache) calcTotalScore() int {
 	}
 	return scoreTotal
 }
+
+func (y YoutubeCache) getNumberOfUsedCacheServers() int {
+	numberOfUsedCacheServers := 0
+	for _, server := range y.Cache
+	return 0
+}
