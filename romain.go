@@ -5,7 +5,5 @@ func (cs CacheServer) isFull(video *Video) bool {
 	if video.Size > (y.Cap - cs.MemoryUsed) {
 		return true
 	}
-
 	return false
 }
-
