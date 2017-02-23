@@ -3,57 +3,76 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"strconv"
 	"strings"
 )
 
-func read() Pizza {
+func read() {
 	b, err := ioutil.ReadFile("input/" + fileName + ".in")
 	if err != nil {
 		panic(err)
 	}
-
-	return decode(b)
+	decode(b)
 }
 
-func decode(b []byte) Pizza {
+func decode(b []byte) {
 	tmp := bytes.NewReader(b)
 	s := bufio.NewScanner(tmp)
 	s.Scan()
 	args := toSliceOfInt(s.Text())
-	myPizza := NewPizza(args[0], args[1], args[2], args[3])
-	i := 0
-	for s.Scan() {
-		for _, c := range s.Bytes() {
-			switch c {
-			case byte('T'):
-				myPizza.Cell[i].Ingredient = TOMATO
-			case byte('M'):
-				myPizza.Cell[i].Ingredient = MUSHROOM
-			}
-			i++
+	y = YoutubeCache{
+		NVideos:    args[0],
+		NEndpoints: args[1],
+		NRequests:  args[2],
+		NCaches:    args[3],
+		Cap:        args[4],
+		Video:      make([]Video, args[0]),
+		Endpoint:   make([]Endpoint, args[1]),
+		Request:    make([]Request, args[2]),
+	}
+	s.Scan()
+	args = toSliceOfInt(s.Text())
+	for i := range y.Video {
+		y.Video[i].Size = args[i]
+	}
+	for i := range y.Endpoint {
+		s.Scan()
+		args = toSliceOfInt(s.Text())
+		y.Endpoint[i].LatencyDataCenter = args[0]
+		y.Endpoint[i].NServer = args[1]
+		y.Endpoint[i].Connection = make([]Connection, args[1])
+		for j := range y.Endpoint[i].Connection {
+			s.Scan()
+			args = toSliceOfInt(s.Text())
+			y.Endpoint[i].Connection[j].CacheID = args[0]
+			y.Endpoint[i].Connection[j].LatencyCacheServer = args[1]
 		}
 	}
-	return myPizza
-}
-
-func encode(slices Pizza) string {
-	output := fmt.Sprintf("%d", len(slices))
-	for _, slice := range slices {
-		output += fmt.Sprintf("\n%d %d %d %d", slice.X1, slice.Y1, slice.X2, slice.Y2)
-	}
-	return output
-}
-
-func write(slices Pizza) {
-	output := encode(slices)
-	err := ioutil.WriteFile("output/"+fileName+".out", []byte(output), 0644)
-	if err != nil {
-		return
+	for i := range y.Request {
+		s.Scan()
+		args = toSliceOfInt(s.Text())
+		y.Request[i].VideoID = args[0]
+		y.Request[i].EndpointID = args[1]
+		y.Request[i].NRequest = args[2]
 	}
 }
+
+//func encode() string {
+//	output := fmt.Sprintf("%d", len(slices))
+//	for _, slice := range slices {
+//		output += fmt.Sprintf("\n%d %d %d %d", slice.X1, slice.Y1, slice.X2, slice.Y2)
+//	}
+//	return output
+//}
+//
+//func write() {
+//	output := encode()
+//	err := ioutil.WriteFile("output/"+fileName+".out", []byte(output), 0644)
+//	if err != nil {
+//		return
+//	}
+//}
 
 func toSliceOfInt(line string) []int {
 	args := strings.Split(line, " ")
