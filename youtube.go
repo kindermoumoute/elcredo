@@ -9,7 +9,7 @@ type YoutubeCache struct {
 	Video      []Video
 	Endpoint   []Endpoint
 	Request    []Request
-	Cache      []Cache
+	Cache      []CacheServer
 }
 
 type Video struct {
@@ -35,6 +35,6 @@ type Request struct {
 }
 
 type CacheServer struct {
-	Memory  int
-	Reauest []*Request
+	MemoryUsed int
+	Request    []*Request
 }
