@@ -5,10 +5,8 @@ func (cs CacheServer) isFull(video Video) bool {
 	if video.Size > (y.Cap - cs.MemoryUsed) {
 		return true
 	}
-
 	return false
 }
-
 
 func (cs CacheServer) addVideos() {
 	for _,request := range cs.Request {
@@ -17,3 +15,4 @@ func (cs CacheServer) addVideos() {
 		}
 	}
 }
+
