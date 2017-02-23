@@ -37,5 +37,5 @@ type Request struct {
 type CacheServer struct {
 	MemoryUsed int
 	Request    []*Request
-	VideoID    []int
+	VideoID    map[int]bool
 }
