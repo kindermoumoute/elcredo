@@ -6,17 +6,18 @@ import (
 )
 
 var (
-	fileName = "kittens"
+	fileName = "trending_today"
 	y        YoutubeCache
 )
 
 func main() {
 	read()
 	for i := range y.Cache {
-		fmt.Println(i)
 		feedCasheServerRequests(i)
 		sort.Sort(ByScore(y.Cache[i].Request))
 		(&y.Cache[i]).addVideos()
+		
 	}
+	fmt.Println(calcTotalScore())
 	write()
 }
