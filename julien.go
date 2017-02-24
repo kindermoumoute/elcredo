@@ -1,26 +1,30 @@
 package main
 
-func addRequestNotSorted(cacheServer *CacheServer, request *Request) {
-	size := y.Video[request.VideoID].Size
-	nbrReq := request.NRequest
-	latenceDateCenter := y.Endpoint[request.EndpointID].LatencyDataCenter
-	latenceCacheServer := y.Endpoint[request.EndpointID].Connection[request.EndpointID].LatencyCacheServer
-	latenceWon := latenceDateCenter - latenceCacheServer
+func addRequestNotSorted(cacheID, requestID int) {
+	size := y.Video[y.Request[requestID].VideoID].Size
+	nbrReq := y.Request[requestID].NRequest
+	latenceDateCenter := y.Endpoint[y.Request[requestID].EndpointID].LatencyDataCenter
+	var connection Connection
+	for _, c := range y.Endpoint[y.Request[requestID].EndpointID].Connection {
+		if c.CacheID == cacheID {
+			connection = c
+			break
+		}
+	}
+	latenceWon := latenceDateCenter - connection.LatencyCacheServer
 
-	request.Score = (nbrReq * latenceWon) / size
+	y.Request[requestID].Score = (nbrReq * latenceWon) / size
 
-	cacheServer.Request = append(cacheServer.Request, request)
+	y.Cache[cacheID].Request = append(y.Cache[cacheID].Request, &y.Request[requestID])
 }
 
 func feedCasheServerRequests(cacheID int) {
-
 	for numEndPoint := 0; numEndPoint < y.NEndpoints; numEndPoint++ {
 		for numConnection := 0; numConnection < len(y.Endpoint[numEndPoint].Connection); numConnection++ {
-
 			if y.Endpoint[numEndPoint].Connection[numConnection].CacheID == cacheID {
 				for numRequest := 0; numRequest < y.NRequests; numRequest++ {
 					if y.Request[numRequest].EndpointID == numEndPoint {
-						y.Cache[cacheID].Request = append(y.Cache[cacheID].Request)
+						addRequestNotSorted(cacheID, numRequest)
 					}
 				}
 			}

@@ -31,6 +31,10 @@ func decode(b []byte) {
 		Video:      make([]Video, args[0]),
 		Endpoint:   make([]Endpoint, args[1]),
 		Request:    make([]Request, args[2]),
+		Cache:      make([]CacheServer, args[3]),
+	}
+	for i := range y.Cache {
+		y.Cache[i].VideoID = make(map[int]bool)
 	}
 	s.Scan()
 	args = toSliceOfInt(s.Text())
@@ -61,10 +65,13 @@ func decode(b []byte) {
 
 func encode() string {
 	output := fmt.Sprintf("%d", len(y.Cache))
+	//fmt.Printf("%d", len(y.Cache))
 	for i, server := range y.Cache {
 		output += fmt.Sprintf("\n%d", i)
+		//fmt.Printf("\n%d", i)
 		for videoID := range server.VideoID {
 			output += fmt.Sprintf(" %d", videoID)
+			//fmt.Printf(" %d", videoID)
 		}
 	}
 	return output
